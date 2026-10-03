@@ -21,8 +21,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) · Versioning: 
 
 ### Fixed
 
-- Version negotiation picked the first plugin to load, not the newest copy. Composer includes a package's `init.php` once per request, because every bundled copy gets the same file ID, so later copies never registered. The bootstrap now asks Composer for every registered vendor folder on first use and reads each copy's version from its class file. Takes effect once the plugin that loads first on a site bundles 0.1.3. `tests/negotiation.sh` proves it with real Composer installs in four load orders.
-- `init.php` registered version `0.1.1` while the class was `0.1.2`. Version negotiation picks the highest registered version, so a stale number could load an older copy bundled by another plugin. Both now say `0.1.3`.
+- *Replaced in 0.2.0 by mai-package-loader.* Version negotiation picked the first plugin to load, not the newest copy, because Composer includes a package's `init.php` once per request. 0.1.3 fixed it in its own bootstrap; 0.2.0 removes the bootstrap instead.
+- *Replaced in 0.2.0, which has no `init.php`.* `init.php` registered version `0.1.1` while the class was `0.1.2`.
 - The docs said `error()` always reaches `debug.log`. It only does when `WP_DEBUG_LOG` is on, which is the intended behaviour. The method docblocks and the README now say so. No behaviour changed.
 
 ## [0.1.2] - 2026-07-08

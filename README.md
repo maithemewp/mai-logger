@@ -27,13 +27,17 @@ If you're hacking on this package locally and want a consuming plugin to pull fr
 ```json
 {
     "repositories": [
-        { "type": "path", "url": "/path/to/local/mai-logger", "options": { "symlink": false } }
+        { "type": "path", "url": "/path/to/local/mai-logger", "options": { "symlink": false } },
+        { "type": "path", "url": "/path/to/local/mai-package-loader", "options": { "symlink": false } }
     ],
     "require": {
-        "maithemewp/mai-logger": "@dev"
+        "maithemewp/mai-logger": "@dev",
+        "maithemewp/mai-package-loader": "@dev"
     }
 }
 ```
+
+The loader is listed too: Composer only honours `@dev` on the plugin's own requirements.
 
 Use `"symlink": false` (mirror mode), not symlink mode. Strauss has a known bug that deletes any `vendor/` subdirectory whose only contents are symlinks, which would nuke `vendor/maithemewp/` on every install. Mirror mode copies real files and avoids the problem. Run `composer update maithemewp/mai-logger` after each edit to propagate changes into the consumer's `vendor/`.
 

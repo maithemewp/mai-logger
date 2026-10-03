@@ -75,4 +75,4 @@ if ( ! class_exists( 'Mai_Logger_Bootstrap', false ) ) {
 }
 
 // Register THIS plugin's bundled version. Bump the string when releasing.
-Mai_Logger_Bootstrap::register( '0.1.1', __DIR__ . '/Mai_Logger.php' );
+Mai_Logger_Bootstrap::register( '0.1.3', __DIR__ . '/Mai_Logger.php' );

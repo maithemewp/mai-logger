@@ -4,6 +4,13 @@ All notable changes to `mai-logger` are documented here.
 
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) · Versioning: [Semantic Versioning](https://semver.org/).
 
+## [0.1.3] - 2026-10-03
+
+### Fixed
+
+- `init.php` registered version `0.1.1` while the class was `0.1.2`. Version negotiation picks the highest registered version, so a stale number could load an older copy bundled by another plugin. Both now say `0.1.3`.
+- The docs said `error()` always reaches `debug.log`. It only does when `WP_DEBUG_LOG` is on, which is the intended behaviour. The method docblocks and the README now say so. No behaviour changed.
+
 ## [0.1.2] - 2026-07-08
 
 ### Changed

@@ -65,12 +65,16 @@ The constructor accepts either a plugin slug (used verbatim as the log-line pref
 
 ## Logging behavior
 
-| Level | Always logs | When `WP_DEBUG` on | Where |
-|---|---|---|---|
-| `error()` | Yes | — | Ray + WP-CLI + `debug.log` |
-| `warning()` | No | Yes | Ray + WP-CLI + `debug.log` |
-| `info()` | No | Yes | Ray + WP-CLI **only** |
-| `success()` | No | Yes | Ray + WP-CLI **only** |
+- **`error()`** logs even with `WP_DEBUG` off.
+  - Goes to Ray and WP-CLI.
+  - Goes to `debug.log` only when `WP_DEBUG_LOG` is on.
+- **`warning()`** needs `WP_DEBUG` on.
+  - Goes to Ray and WP-CLI.
+  - Goes to `debug.log` when `WP_DEBUG_LOG` is on too.
+- **`info()` and `success()`** need `WP_DEBUG` on.
+  - Go to Ray and WP-CLI only.
+
+Nothing is written to the log while `WP_DEBUG_LOG` is off, so a production site that has not turned on its debug log stays quiet. Under WP-CLI, every level goes to the console instead of `debug.log`.
 
 `info` and `success` deliberately never go to `debug.log` — they're for development output (Ray, WP-CLI), not production logs.
 

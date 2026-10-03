@@ -2,7 +2,7 @@
 /**
  * Mai_Logger — lightweight logger for WordPress plugins.
  *
- * @version 0.1.2
+ * @version 0.1.3
  *
  * Loaded lazily by Mai_Logger_Bootstrap's autoloader, which selects the
  * newest version registered across all installed plugins.
@@ -17,7 +17,7 @@ defined( 'ABSPATH' ) || 'cli' === PHP_SAPI || exit;
 
 class Mai_Logger {
 
-	const VERSION = '0.1.2';
+	const VERSION = '0.1.3';
 
 	/**
 	 * Display name used as the prefix on every log line.
@@ -45,7 +45,8 @@ class Mai_Logger {
 	}
 
 	/**
-	 * Log an error message. Always logs (even with WP_DEBUG off).
+	 * Log an error. Goes to Ray and WP-CLI even with WP_DEBUG off, and to
+	 * debug.log only when WP_DEBUG_LOG is on.
 	 *
 	 * @param string $message The message to log.
 	 * @param mixed  ...$args  Optional context values appended to the log output.
@@ -57,7 +58,8 @@ class Mai_Logger {
 	}
 
 	/**
-	 * Log a warning. Logs to debug.log when WP_DEBUG is on.
+	 * Log a warning. Needs WP_DEBUG on. Goes to Ray and WP-CLI, and to
+	 * debug.log when WP_DEBUG_LOG is on too.
 	 *
 	 * @param string $message The message to log.
 	 * @param mixed  ...$args  Optional context values appended to the log output.
@@ -102,7 +104,7 @@ class Mai_Logger {
 	 * @return void
 	 */
 	private function log( string $message, string $type, ...$args ): void {
-		// Always log errors. Other types only when WP_DEBUG is on.
+		// Errors get through with WP_DEBUG off. Other types need it on.
 		if ( 'error' !== $type && ( ! defined( 'WP_DEBUG' ) || ! WP_DEBUG ) ) {
 			return;
 		}
@@ -146,8 +148,9 @@ class Mai_Logger {
 			return;
 		}
 
-		// Only errors and warnings go to the WP debug log.
-		// info/success are dev-only (Ray, WP-CLI) and never pollute production logs.
+		// Only errors and warnings go to the debug log, and only when the site
+		// has turned it on. A production site with WP_DEBUG_LOG off stays quiet.
+		// info/success are dev-only (Ray, WP-CLI) and never reach the log.
 		if ( in_array( $type, [ 'error', 'warning' ], true ) && defined( 'WP_DEBUG_LOG' ) && WP_DEBUG_LOG ) {
 			error_log( $formatted_full );
 		}

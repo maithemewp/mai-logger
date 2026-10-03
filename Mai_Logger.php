@@ -2,10 +2,10 @@
 /**
  * Mai_Logger — lightweight logger for WordPress plugins.
  *
- * @version 0.1.3
+ * @version 0.2.0
  *
- * Loaded lazily by Mai_Logger_Bootstrap's autoloader, which selects the
- * newest version registered across all installed plugins.
+ * Loaded by maithemewp/mai-package-loader, which picks the newest copy
+ * bundled on a site, whichever plugin loads first.
  *
  * API stability contract:
  * - Public methods are ADDITIVE ONLY. Never rename or remove.
@@ -17,7 +17,7 @@ defined( 'ABSPATH' ) || 'cli' === PHP_SAPI || exit;
 
 class Mai_Logger {
 
-	const VERSION = '0.1.3';
+	const VERSION = '0.2.0';
 
 	/**
 	 * Display name used as the prefix on every log line.

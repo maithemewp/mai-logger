@@ -4,7 +4,20 @@ All notable changes to `mai-logger` are documented here.
 
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) · Versioning: [Semantic Versioning](https://semver.org/).
 
-## [0.1.3] - 2026-10-03
+## [0.2.0] - unreleased
+
+0.1.3 was never tagged. This release replaces its version negotiation with the loader, and includes its other fixes, listed below.
+
+### Changed
+
+- **Loaded by [maithemewp/mai-package-loader](https://github.com/maithemewp/mai-package-loader)**, through a `mai-package.php` declaration, instead of this package's own bootstrap. `init.php` and `Mai_Logger_Bootstrap` are gone. Requires `maithemewp/mai-package-loader` `^0.1`.
+- **Needs PHP 8.1**, up from 7.4, because the loader does. Every plugin bundling mai-logger already requires 8.1 or later: mai-analytics 8.1, the rest 8.2.
+
+### Fixed
+
+- **The newest copy now loads.** Composer runs a package's `files` entry only once per request, so only the first plugin's bootstrap ever registered. Older copies keep working beside this one: the loader answers first. `tests/coexistence.sh` proves it against a 0.1.2 copy.
+
+## [0.1.3] - never tagged, included in 0.2.0
 
 ### Fixed
 

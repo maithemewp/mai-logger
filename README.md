@@ -82,12 +82,15 @@ Nothing is written to the log while `WP_DEBUG_LOG` is off, so a production site 
 
 Each plugin Composer-installs its own copy of `mai-logger` into its `vendor/`. When a plugin's `vendor/autoload.php` runs, this package's `init.php` is included automatically (via Composer's `"files"` autoload). That registers the bundled version into `Mai_Logger_Bootstrap`'s static registry.
 
-The actual `Mai_Logger` class is **not** loaded via Composer's autoloader. It's loaded lazily by a custom autoloader that picks the highest registered version on first reference.
+Composer includes that `init.php` only once per request, because every copy of this package gets the same file ID. So on first use the bootstrap also asks Composer for every registered vendor folder, finds each bundled `Mai_Logger.php`, and reads its version from the class file.
+
+The actual `Mai_Logger` class is **not** loaded via Composer's autoloader. It's loaded lazily, on first reference, from the copy with the highest version.
 
 Result:
-- Plugin A bundles v0.1, Plugin B bundles v0.2 → `new Mai_Logger()` always uses v0.2.
+- Plugin A bundles v0.1 and Plugin B bundles v0.2. `new Mai_Logger()` uses v0.2, whichever plugin loads first. `tests/negotiation.sh` proves this with real Composer installs.
 - Bug fixes propagate the moment any plugin on the site is updated.
-- Logging works during activation and early boot — no hook timing required.
+- Only plugins loaded before the first `new Mai_Logger()` are considered. Once `plugins_loaded` has fired, that is every active plugin. A logger created while plugin files are still loading may get an older copy.
+- **Before 0.1.3 this did not work.** The first plugin to load always won. Its bootstrap is the one in charge, so on a site where that plugin still bundles 0.1.2 or earlier, the fix takes effect once that plugin ships 0.1.3.
 
 ## API stability contract
 

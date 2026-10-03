@@ -59,6 +59,8 @@ if ( ! class_exists( 'Mai_Logger_Bootstrap', false ) ) {
 					return;
 				}
 
+				self::discover();
+
 				if ( empty( self::$versions ) ) {
 					return;
 				}
@@ -70,6 +72,45 @@ if ( ! class_exists( 'Mai_Logger_Bootstrap', false ) ) {
 					require $path;
 				}
 			} );
+		}
+
+		/**
+		 * Finds every bundled copy, not only the one whose init.php ran.
+		 *
+		 * Composer includes a "files" entry once per request, keyed by package
+		 * name and path, which are the same in every plugin bundling this
+		 * package. So only the first plugin's init.php ever runs, and on its
+		 * own register() would only ever see that first copy: load order would
+		 * pick the version, not the version number.
+		 *
+		 * Composer does keep a list of every vendor folder whose autoloader has
+		 * been registered. Each one holding a copy is added here, with the
+		 * version read from that copy's class file, so a stale number in an
+		 * init.php cannot pick the wrong file either.
+		 *
+		 * Only copies whose plugin has loaded by the first use are seen, which
+		 * is every active plugin once `plugins_loaded` has fired.
+		 */
+		private static function discover(): void {
+			$loader = 'Composer\Autoload\ClassLoader';
+
+			if ( ! class_exists( $loader, false ) || ! method_exists( $loader, 'getRegisteredLoaders' ) ) {
+				return;
+			}
+
+			foreach ( array_keys( $loader::getRegisteredLoaders() ) as $vendor_dir ) {
+				$path = $vendor_dir . '/maithemewp/mai-logger/Mai_Logger.php';
+
+				if ( ! is_readable( $path ) ) {
+					continue;
+				}
+
+				$source = (string) file_get_contents( $path );
+
+				if ( preg_match( "/const VERSION = '([^']+)'/", $source, $match ) && ! isset( self::$versions[ $match[1] ] ) ) {
+					self::$versions[ $match[1] ] = $path;
+				}
+			}
 		}
 	}
 }

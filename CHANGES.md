@@ -11,6 +11,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) · Versioning: 
 ### Changed
 
 - **Loaded by [maithemewp/mai-package-loader](https://github.com/maithemewp/mai-package-loader)**, through a `mai-package.php` declaration, instead of this package's own bootstrap. `init.php` and `Mai_Logger_Bootstrap` are gone. Requires `maithemewp/mai-package-loader` `^0.1`.
+- **No `ABSPATH` guard in the class files.** They only define classes, and the guard made a test suite, or anything loading them outside WordPress, end silently with exit code 0 and no output.
 - **Needs PHP 8.1**, up from 7.4, because the loader does. Every plugin bundling mai-logger already requires 8.1 or later: mai-analytics 8.1, the rest 8.2.
 
 ### Fixed

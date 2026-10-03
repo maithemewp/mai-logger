@@ -13,8 +13,6 @@
  * - If you ever need a true breaking change, fork to a new class name.
  */
 
-defined( 'ABSPATH' ) || 'cli' === PHP_SAPI || exit;
-
 class Mai_Logger {
 
 	const VERSION = '0.2.0';

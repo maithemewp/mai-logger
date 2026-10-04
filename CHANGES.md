@@ -4,7 +4,7 @@ All notable changes to `mai-logger` are documented here.
 
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) · Versioning: [Semantic Versioning](https://semver.org/).
 
-## [0.2.0] - unreleased
+## [0.2.0] - 2026-10-03
 
 0.1.3 was never tagged. This release replaces its version negotiation with the loader, and includes its other fixes, listed below.
 

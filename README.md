@@ -100,7 +100,7 @@ This contract exists because all consuming plugins share one loaded class at run
 
 **Versioning:**
 - Strict semver. Patch = bug fix only. Minor = additive only. Major = … see "fork to new class name" above.
-- Always tag releases and tell consumers to require a tagged constraint (e.g. `^0.1`). Tracking `dev-main` is fine for local development but ships unreleased code to production.
+- Always tag releases and tell consumers to require a tagged constraint (e.g. `^0.2`). Tracking `dev-main` is fine for local development but ships unreleased code to production.
 - Bump the version in `mai-package.php` and `Mai_Logger::VERSION` together, in the same commit as any change to `Mai_Logger.php`. The loader picks copies by the `mai-package.php` version.
 
 ## Edge cases
